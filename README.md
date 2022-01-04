@@ -180,8 +180,171 @@ import Script from 'next/script'
 
 ##### CSS Styling
 
-  *** 内置裁切服务 ***
+[style-jsx](https://github.com/vercel/styled-jsx)是next.js出品的css-in-js方案
 
+针对JSX语法提供全局、局部及组件化友好样式，且支持服务端和客户端同时运行 
+(Full, scoped and component-friendly CSS support for JSX (rendered on the server or the client).)
+```javascript
+<style jsx>{`
+  …
+`}</style>
+```
+该方案是如何处理css兼容性如、如何预编译sass语法呢？
+在jsx文件进行转译时，主要通过babel插件和抽象语法树：
+
+1. babel配置文件.babelrc
+```json
+
+{
+    "plugins": ["styled-jsx/babel"]
+}
+```
+2. babel针对<style>组件转译类似如下
+```javascript
+
+
+import _JSXStyle from 'styled-jsx/style'
+export default () => (
+    <div className="jsx-123">
+        <p className="jsx-123">only this paragraph will get the style :)</p>
+        <_JSXStyle id="123">{`p.jsx-123 {color: red;}`}</_JSXStyle>
+    </div>
+);
+```
+class名称唯一性给样式提供了组件级封装同时组件内部做了如下优化：
+- 渲染时注入样式
+- 组件样式仅注入一次（即使组件被使用多次）
+- 自动去掉无用样式
+- 服务端渲染样式可追踪
+
+
+styles.js
+```javascript
+/* styles.js */
+import css from 'styled-jsx/css'
+
+// Scoped styles
+export const button = css`
+  button {
+    color: hotpink;
+  }
+`
+
+// Global styles
+export const body = css.global`body { margin: 0; }`
+
+// Resolved styles
+export const link = css.resolve`a { color: green; }`
+// link.className -> scoped className to apply to `a` elements e.g. jsx-123
+// link.styles -> styles element to render inside of your component
+
+// Works also with default exports
+export default css`
+  div {
+    color: green;
+  }
+`
+```
+
+```javascript
+import styles, { button, body } from './styles'
+
+export default () => (
+  <div>
+    <button>styled-jsx</button>
+    <style jsx>{styles}</style>
+    <style jsx>{button}</style>
+    <style jsx global>
+      {body}
+    </style>
+  </div>
+)
+```
+```javascript
+import React from 'react'
+import css from 'styled-jsx/css'
+
+function getLinkStyles(color) {
+  return css.resolve`
+    a { color: ${color} }
+  `
+}
+
+export default props => {
+  const { className, styles } = getLinkStyles(props.theme.color)
+
+  return (
+    <div>
+      <Link className={className}>About</Link>
+      {styles}
+    </div>
+  )
+}
+```
+
+##### Layout组件
+项目顶级目录下创建components目录
+layout.js
+```javascript
+import styles from './layout.module.scss'
+
+export default function Layout({ children }) {
+    return <div className={styles.container}>{children}</div>
+}
+```
+layout.module.scss
+```scss
+.container {
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
+}
+```
+
+next.js css modules方案引入后：
+- 自动化生成唯一的class名称，无需担心命名冲突
+- next.js自动化代码分割，确保引入CSS内容最小
+- 自动萃取css内容并生成css文件
+
+##### 全局样式
+
+```javascript
+import '../styles/global.css'
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+```
+
+##### 样式建议
+
+- [classnames](https://github.com/JedWatson/classnames)
+- PostCSS Config
+
+#### 自定义postcss
+
+默认自动使用
+- Autoprefixer
+- Cross-browser Flexbox bugs
+- New CSS features are automatically compiled for Internet Explorer 11 compatibility:
+  all Property
+  Break Properties
+  font-variant Property
+  Gap Properties
+  Media Query Ranges
+
+By default, CSS Grid and Custom Properties (CSS variables) are not compiled for IE11 support.
+
+[browserslist](https://github.com/browserslist/browserslist) 在不同浏览器工具之间共享设定的目标浏览器版本， 比如：
+
+- babel
+- postcss
+- autoprefixer
+
+[Does Autoprefixer polyfill Grid Layout for IE?](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie)
+
+
+内置裁切服务
 Next.js 内置支持CSS 、Sass
 
 
