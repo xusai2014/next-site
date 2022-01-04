@@ -19,13 +19,13 @@
 
 next.js主旨是为用户提供同类最优的用户体验及丰富的内置功能，例如：
 
-- (直观的页面路由系统 （同时支持动态路由）)[https://nextjs.org/docs/basic-features/pages]
-- (支持预渲染，每个页面都支持静态生成和服务端直出)[https://nextjs.org/docs/basic-features/pages]
+- [直观的页面路由系统(同时支持动态路由)](https://nextjs.org/docs/basic-features/pages)
+- [支持预渲染，每个页面都支持静态生成和服务端直出](https://nextjs.org/docs/basic-features/pages)
 - 自动化代码分割，支持快速加载
 - 客户端渲染路由方式支持优先预加载
-- (内置CSS处理、支持Sass语法、支持任意css-in-js库)[https://nextjs.org/docs/basic-features/built-in-css-support]
+- [内置CSS处理、支持Sass语法、支持任意css-in-js库](https://nextjs.org/docs/basic-features/built-in-css-support)
 - 开发者模式下支持热更新
-- (API路由使用Serverless Function构造API端)[https://nextjs.org/docs/api-routes/introduction]
+- [API路由使用Serverless Function构造API端](https://nextjs.org/docs/api-routes/introduction)
 - 完全可拓展
 
 Next.js被用于数以万计的面向生产的网站和web应用程序，其中包括许多世界上最大的品牌。
