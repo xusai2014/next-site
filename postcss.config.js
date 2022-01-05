@@ -14,17 +14,17 @@ module.exports = {
 			{
 				autoprefixer: {
 					// Does Autoprefixer polyfill Grid Layout for IE?
-					flexbox: "no-2009",
+					flexbox: "no-2009"
 				},
 				stage: 3,
 				features: {
-					"custom-properties": false,
-				},
-			},
+					"custom-properties": false
+				}
+			}
 		],
 		...(process.env.NODE_ENV === "production" ? ["cssnano"] : []), // https://www.cssnano.cn/docs/introduction/
-		"postcss-fail-on-warn", // n some situations it might be helpful to fail the build on any warning from PostCSS or one of its plugins. This guarantees that no warnings go unnoticed, and helps to avoid bugs
+		"postcss-fail-on-warn" // n some situations it might be helpful to fail the build on any warning from PostCSS or one of its plugins. This guarantees that no warnings go unnoticed, and helps to avoid bugs
 		// "stylefmt",
 		// "stylelint",
-	],
+	]
 };

@@ -5,5 +5,6 @@ module.exports = {
 		"./pages/**/*.tsx",
 		"./components/**/*.tsx",
 	],
+
 	// ...
 };
