@@ -1,8 +1,16 @@
 import NextErrorComponent from "next/error";
 import * as Sentry from "@sentry/nextjs";
 import type { NextPageContext } from "next";
+import type { ErrorProps } from "next/error";
 
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }: any) => {
+declare type HasGetInitialPropsRun = {
+	hasGetInitialPropsRun: boolean;
+};
+const MyError = ({
+	statusCode,
+	hasGetInitialPropsRun,
+	err
+}: ErrorProps & NextPageContext & HasGetInitialPropsRun) => {
 	if (!hasGetInitialPropsRun && err) {
 		// getInitialProps is not called in case of
 		// https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -21,16 +29,19 @@ MyError.getInitialProps = async ({
 	query,
 	AppTree
 }: NextPageContext) => {
-	const errorInitialProps: any = await NextErrorComponent.getInitialProps({
-		res,
-		err,
-		pathname,
-		query,
-		AppTree
-	});
+	const errorInitialProps: ErrorProps | { hasGetInitialPropsRun: boolean } =
+		await NextErrorComponent.getInitialProps({
+			res,
+			err,
+			pathname,
+			query,
+			AppTree
+		});
 
 	// Workaround for https://github.com/vercel/next.js/issues/8592, mark when
 	// getInitialProps has run
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	errorInitialProps["hasGetInitialPropsRun"] = true;
 
 	// Running on the server, the response object (`res`) is available.
@@ -63,7 +74,6 @@ MyError.getInitialProps = async ({
 		new Error(`_error.js getInitialProps missing data at path: ${asPath}`)
 	);
 	await Sentry.flush(2000);
-
 	return errorInitialProps;
 };
 
