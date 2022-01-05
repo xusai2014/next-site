@@ -23,8 +23,8 @@ module.exports = {
 			}
 		],
 		...(process.env.NODE_ENV === "production" ? ["cssnano"] : []), // https://www.cssnano.cn/docs/introduction/
+		// "stylelint",
 		"postcss-fail-on-warn" // n some situations it might be helpful to fail the build on any warning from PostCSS or one of its plugins. This guarantees that no warnings go unnoticed, and helps to avoid bugs
 		// "stylefmt",
-		// "stylelint",
 	]
 };

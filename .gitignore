@@ -2,7 +2,7 @@
 .idea
 .eslintcache
 .stylelintcache
-
+.sentryclirc
 # dependencies
 /node_modules
 /.pnp

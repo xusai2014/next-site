@@ -372,5 +372,26 @@ By default, CSS Grid and Custom Properties (CSS variables) are not compiled for 
 
 [Does Autoprefixer polyfill Grid Layout for IE?](https://github.com/postcss/autoprefixer#does-autoprefixer-polyfill-grid-layout-for-ie)
 
+#### 服务中间件
+符合洋葱模型，逐级调用
+固定命名方式 _middleware.ts
+
+https://nextjs.org/docs/middleware
+
+##### sentry
+SENTRY_ORG=<org> SENTRY_AUTH_TOKEN=<token> node_modules/.bin/sentry-cli projects list
+SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=34f3f4f3537b4120bd40e405e3c353025c4885a5016f438d97b20f092a3a6f1c node_modules/.bin/sentry-cli projects list
+SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=252a82bc563d11eb99510242ac170015 node_modules/.bin/sentry-cli projects list
+
+#### 代码风格检查
+
+- eslint
+- stylelint
+- prettier
+- editorconfg
+
+
+
+
 内置裁切服务
 Next.js 内置支持 CSS 、Sass
