@@ -41,7 +41,7 @@ const sentryWebpackPluginOptions = {
 	configFile: path.join(__dirname,'./sentry.properties'),
 	dryRun: false,
 	silent:false,
-	debug: true,
+	debug: false,
 }
 
 module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions)
