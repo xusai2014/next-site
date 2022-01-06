@@ -1,9 +1,9 @@
 import "../styles/globals.scss";
-import type { AppProps } from "next/app";
+import type { AppProps, AppInitialProps } from "next/app";
 import Script from "next/script";
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const { intlMessages = {} }: any = pageProps;
+	const { intlMessages = {} }: AppInitialProps & any = pageProps;
 	return (
 		<>
 			<Script

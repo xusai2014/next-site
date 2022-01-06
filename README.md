@@ -383,7 +383,9 @@ SENTRY_ORG=<org> SENTRY_AUTH_TOKEN=<token> node_modules/.bin/sentry-cli projects
 SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=34f3f4f3537b4120bd40e405e3c353025c4885a5016f438d97b20f092a3a6f1c node_modules/.bin/sentry-cli projects list
 SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=252a82bc563d11eb99510242ac170015 node_modules/.bin/sentry-cli projects list
 
+
 #### 代码风格检查
+
 
 - eslint
 - stylelint
@@ -391,7 +393,18 @@ SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=252a82bc563d11eb99510242ac170015 node_modul
 - editorconfg
 
 
+#### i18n
 
+https://www.unicode.org/reports/tr35/tr35-59/tr35.html#Identifiers
 
+- Sub-path Routing
+```
+module.exports = {
+  i18n: {
+    locales: ['en-US', 'fr', 'nl-NL'],
+    defaultLocale: 'en-US',
+  },
+}
+```
 内置裁切服务
 Next.js 内置支持 CSS 、Sass
