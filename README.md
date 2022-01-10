@@ -379,10 +379,37 @@ By default, CSS Grid and Custom Properties (CSS variables) are not compiled for 
 https://nextjs.org/docs/middleware
 
 ##### sentry
-SENTRY_ORG=<org> SENTRY_AUTH_TOKEN=<token> node_modules/.bin/sentry-cli projects list
-SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=34f3f4f3537b4120bd40e405e3c353025c4885a5016f438d97b20f092a3a6f1c node_modules/.bin/sentry-cli projects list
-SENTRY_ORG=yesauto SENTRY_AUTH_TOKEN=252a82bc563d11eb99510242ac170015 node_modules/.bin/sentry-cli projects list
+next.config.js
+```javascript
+const {withSentryConfig} = require('@sentry/nextjs');
 
+const moduleExports = (phase, {defaultConfig}) => {
+    // next.confg.js 函数式配置方式
+}
+
+const sentryWebpackPluginOptions = {
+  release: process.env.ENV_NAME || 'development',
+  include: './pages',
+  ignore: ['node_modules'],
+  environment: process.env.ENV_NAME || 'development',
+  configFile: path.join(__dirname, './sentry.properties'),
+  dryRun: process.env.NODE_ENV === 'development',
+  silent: process.env.NODE_ENV === 'development',
+  debug: false,
+}
+module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+```
+
+添加如下文件：
+- .sengryclic [本地化读取文件，不可提交至代码库。涉及认证信息泄漏]
+- sentry.properties [通用化配置]
+- sentry.client.config.js
+- sentry.server.config.js
+
+_error.js
+```javascript
+// TODO
+```
 
 #### 代码风格检查
 
@@ -408,3 +435,91 @@ module.exports = {
 ```
 内置裁切服务
 Next.js 内置支持 CSS 、Sass
+
+#### 网络请求库 swr
+
+SWR is a React Hooks library for data fetching.
+SWR名称取自于stale-while-revalidate, 一种缓存失效策略。
+popularized by HTTP RFC 5861.
+SWR 首先从缓存中获取数据同时发送验证请求，使得最新数据持续更新
+```shell
+yarn add swr --save
+```
+
+#### 模块化
+本来程序很小，多是执行独立的脚本任务，随着前端专业化，构建一致性、可复用、可迭代的Web应用。模块化的重要性愈加明显。
+因此需要开始考虑提供一种将 JavaScript 程序拆分为可按需导入的单独模块的机制。
+Node.js 已经提供这个能力很长时间了，还有很多的 Javascript 库和框架 已经开始了模块的使用（例如， CommonJS 和基于 AMD 的其他模块系统 如 RequireJS, 以及最新的 Webpack 和 Babel
+
+好消息是，最新的浏览器开始原生支持模块功能了。这会是一个好事情 — 浏览器能够最优化加载模块，使它比使用库更有效率：使用库通常需要做额外的客户端处理。
+
+原生JavaScript模块中, 扩展名 .mjs 非常重要，因为使用 MIME-type 为javascript/esm 来导入文件(其他的JavaScript 兼容 MIME-type 像 application/javascript 也可以), 它避免了严格的 MIME 类型检查错误，像 "The server responded with a non-JavaScript MIME type".
+除此之外,  .mjs 的扩展名很明了(比如这个就是一个模块，而不是一个传统 JavaScript文件)，还能够和其他工具互相适用. 看这个 Google's note for further detail
+
+```html
+<script type="module" src="main.mjs"></script>
+<script nomodule defer src="fallback.js"></script>
+
+```
+
+
+ES module
+
+import
+- 在浏览器中，import 语句只能在声明了 type="module" 的 script 的标签中使用。
+- 还有一个类似函数的动态 import()，它不需要依赖 type="module" 的script标签
+- 使用静态 import 更容易从代码静态分析工具和 tree shaking 中受益
+- script 标签中使用 nomodule 属性，可以确保向后兼容
+
+````javascript
+// 仅为副作用而导入一个模块, 这将运行模块中的全局代码, 但实际上不导入任何值。
+import '/modules/my-module.js';
+````
+静态导入，标准用法的import导入的模块是静态的，会使所有被导入的模块，在加载时就被编译。
+动态导入，根据条件导入模块或者按需导入模块，这时你可以使用动态导入代替静态导入。
+
+```javascript
+(async () => {
+  if (somethingIsTrue) {
+    const { default: myDefault, foo, bar } = await import('/modules/my-module.js');
+  }
+})();
+```
+
+export
+- 语句用于从模块中导出实时绑定的函数、对象或原始值,其他程序可以通过 import 语句使用它们
+- 被导出的绑定值依然可以在本地进行修改
+- 在使用import进行导入时，这些绑定值只能被导入模块所读取,但在export导出模块中对这些绑定值进行修改，所修改的值也会实时地更新。
+- 无论是否声明，导出的模块都处于严格模式
+
+两种导出方式：
+- 命名导出
+- 默认导出
+```javascript
+// --- 命名导出 ---
+// 导出事先定义的特性
+export { myFunction ，myVariable };
+
+// 导出单个特性（可以导出var，let，
+//const,function,class）
+export let myVariable = Math.sqrt(2);
+export function myFunction() { ... };
+// --- 默认导出 ---
+
+// 导出事先定义的特性作为默认值
+export { myFunction as default };
+
+// 导出单个特性作为默认值
+export default function () { ... }
+export default class { .. }
+
+```
+联合使用
+```javascript
+export { default as DefaultExport } from 'bar.js';
+```
+
+
+
+
+

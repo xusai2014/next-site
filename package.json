@@ -16,11 +16,12 @@
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
   },
   "dependencies": {
+    "@mui/material": "^5.2.7",
     "@sentry/nextjs": "^6.16.1",
     "next": "12.0.7",
     "react": "17.0.2",
-    "@mui/material": "^5.2.7",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "swr": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "17.0.5",
